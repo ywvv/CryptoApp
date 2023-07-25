@@ -15,8 +15,9 @@ class CoinRepositoryImpl(
 ) : CoinRepository {
 
     private val coinInfoDao = AppDatabase.getInstance(application).coinPriceInfoDao()
-    private val mapper = CoinMapper()
     private val apiService = ApiFactory.apiService
+
+    private val mapper = CoinMapper()
 
     override fun getCoinInfoList(): LiveData<List<CoinInfo>> {
         return coinInfoDao.getPriceList().map {
@@ -36,15 +37,14 @@ class CoinRepositoryImpl(
         while (true) {
             try {
                 val topCoins = apiService.getTopCoinsInfo(limit = 50)
-                val fromSyms = mapper.mapNamesListToString(topCoins)
-                val jsonContainer = apiService.getFullPriceList(fSyms = fromSyms)
+                val fSyms = mapper.mapNamesListToString(topCoins)
+                val jsonContainer = apiService.getFullPriceList(fSyms = fSyms)
                 val coinInfoDtoList = mapper.mapJsonContainerToListCoinInfo(jsonContainer)
                 val dbModelList = coinInfoDtoList.map { mapper.mapDtoToDbModel(it) }
                 coinInfoDao.insertPriceList(dbModelList)
-                delay(10_000)
             } catch (e: Exception) {
-                throw RuntimeException(e)
             }
+            delay(10000)
         }
     }
 }
