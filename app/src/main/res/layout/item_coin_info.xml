@@ -55,8 +55,9 @@
             android:textColor="#000"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="Время последнего обновления: 21:52:33" />
+            tools:text="Час останнього оновлення: 21:52:33" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
